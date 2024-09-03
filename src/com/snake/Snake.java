@@ -1,47 +1,53 @@
 package com.snake;
+
 import java.util.LinkedList;
 
 public class Snake {
     private LinkedList<Node> body;
     private Direction direction = Direction.LEFT;
-    private boolean isLiving=true;
+    private boolean isLiving = true;
+
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
     public Snake() {
         initSnake();
     }
+
     public Direction getDirection() {
         return direction;
     }
+
     public void move() {
-        Node head = body.getFirst();
-        switch (direction) {
-            case UP:
-                body.addFirst(new Node(head.getX(), head.getY() - 1));
-                break;
-            case DOWN:
-                body.addFirst(new Node(head.getX(), head.getY() + 1));
 
-                break;
-            case LEFT:
-                body.addFirst(new Node(head.getX() - 1, head.getY()));
-                break;
-            case RIGHT:
-                body.addFirst(new Node(head.getX() + 1, head.getY()));
-                break;
-        }
-        body.removeLast();
-
-        if (head.getX()<0 || head.getY()<0 || head.getX()>40 || head.getY() >40) {
-            isLiving=false;
-        }
-
-        for (int i = 1; i < body.size(); i++) {
-            Node node = body.get(i);
-            if (head.getX() == node.getX() || head.getY() == node.getY()) {
+        if (isLiving) {
+            Node head = body.getFirst();
+            switch (direction) {
+                case UP:
+                    body.addFirst(new Node(head.getX(), head.getY() - 1));
+                    break;
+                case DOWN:
+                    body.addFirst(new Node(head.getX(), head.getY() + 1));
+                    break;
+                case LEFT:
+                    body.addFirst(new Node(head.getX() - 1, head.getY()));
+                    break;
+                case RIGHT:
+                    body.addFirst(new Node(head.getX() + 1, head.getY()));
+                    break;
+            }
+            body.removeLast();
+            head=body.getFirst();
+            if (head.getX() < 0 || head.getY() < 0 || head.getX() >= 40 || head.getY() >= 40) {
                 isLiving = false;
-                break;
+            }
+            for (int i = 1; i < body.size(); i++) {
+                Node node = body.get(i);
+                if (head.getX() == node.getX() && head.getY() == node.getY()) {
+                    isLiving = false;
+                    break;
+                }
             }
         }
     }
@@ -70,5 +76,23 @@ public class Snake {
 
     public void setLiving(boolean living) {
         isLiving = living;
+    }
+
+    public void eat(Node food) {
+        Node head = body.getFirst();
+        switch (direction) {
+            case UP:
+                body.addFirst(new Node(head.getX(), head.getY() - 1));
+                break;
+            case DOWN:
+                body.addFirst(new Node(head.getX(), head.getY() + 1));
+                break;
+            case LEFT:
+                body.addFirst(new Node(head.getX() - 1, head.getY()));
+                break;
+            case RIGHT:
+                body.addFirst(new Node(head.getX() + 1, head.getY()));
+                break;
+        }
     }
 }

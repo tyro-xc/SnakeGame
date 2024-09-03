@@ -34,7 +34,7 @@ public class Node {
     public void random(){
         Random random = new Random();
 
-        int x=random.nextInt(40);
-        int y=random.nextInt(40);
+        this.x=random.nextInt(40);
+        this.y=random.nextInt(40);
     }
 }

@@ -60,14 +60,30 @@ public class MainFrame extends JFrame {
 
     private void initTimer() {
         Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
+        addKeyListener(new KeyAdapter() {
             @Override
-            public void run() {
-                    snake.move();
-                jPanel.repaint();
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode()== KeyEvent.VK_SPACE) {
+                    TimerTask timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            snake.move();
+                            Node head = snake.getBody().getFirst();
+                            if (head.getX()==food.getX()&& head.getY()==food.getY()) {
+                                snake.eat(food);
+                                food.random();
+                            }
+
+                            jPanel.repaint();
+                        }
+                    };
+                    timer.scheduleAtFixedRate(timerTask, 50, 80);
+                }
+                super.keyReleased(e);
             }
-        };
-        timer.scheduleAtFixedRate(timerTask, 50, 300);
+        });
+
+
     }
 
     private void initSnake() throws HeadlessException {
@@ -76,6 +92,7 @@ public class MainFrame extends JFrame {
 
     private void initGamePanel() {
         jPanel = new JPanel() {
+
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
@@ -89,8 +106,11 @@ public class MainFrame extends JFrame {
                 for (Node node : body) {
                     g.fillRect(node.getX() * 15, node.getY() * 15, 15, 15);
                 }
-
-                g.fillRect(food.getX()*15,food.getY()*15,15,15);
+                //g.drawString("Game Start", 11, 20);
+                g.fillRect(food.getX() * 15, food.getY() * 15, 15, 15);
+                if (!snake.isLiving()) {
+                    g.drawString("Snake Died",250,250);
+                }
             }
         };
         add(jPanel);
@@ -103,7 +123,12 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    public void StartGame(){
+
+    }
     public static void main(String[] args) {
+
+
         new MainFrame().setVisible(true);
     }
 }
